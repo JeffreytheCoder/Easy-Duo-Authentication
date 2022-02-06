@@ -1,7 +1,7 @@
 // chrome.storage.sync.clear(); 
 
 chrome.storage.sync.get(null, function (data) {
-    let HOTPSecret = data.HOTPSecret;
+    let HOTPSecret = 'api-d594f029.duosecurity.com';
     if (HOTPSecret == undefined) // the user has not submitted a correct activation link
     {
         document.getElementById('submit').onclick = function () {
@@ -69,6 +69,11 @@ chrome.storage.sync.get(null, function (data) {
             passcodes = [];
         }
         document.getElementById('next').click();
+
+        const codeInput = document.getElementsByClassName('passcode-input')[0];
+        const enterBtn = document.getElementById('passcode');
+
+        chrome.tabs.executeScript(null, { file: "autoCopyCode.js" });
     }
 });
 
