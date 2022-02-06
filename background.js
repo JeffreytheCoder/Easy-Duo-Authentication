@@ -1,15 +1,12 @@
-const loginUrl = 'https://google.com';
+const loginUrl =
+  'https://shb.ais.ucla.edu/shibboleth-idp/profile/SAML2/Redirect/SSO';
 
-chrome.tabs.onUpdated.addListener(function
-  (tabId, changeInfo, tab) {
-    // read changeInfo data and do something with it (like read the url)
-    console.log(tab.url);
-    console.log(loginUrl);
-    if (tab.url == loginUrl) {
-      // do something here
-      chrome.tabs.sendMessage( tabId, {
-        message: 'login'
-      })
-    }
+chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
+  if (
+    changeInfo.status &&
+    changeInfo.status == 'complete' &&
+    tab.url.includes(loginUrl)
+  ) {
+    chrome.tabs.executeScript(null, { file: 'autoCopyCode.js' });
   }
-);
+});
