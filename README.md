@@ -18,6 +18,8 @@ C += 1
 Once the authenticated inputs a passcode, the authenticator will verify the passcode by calculating HOTP(K, C) for C in a reasonable interval [C, C+n]. If a match is found, then the authentication succeeds. Therefore, if we manage to get the secret key from Duo, we can calculate the exact same passcodes as Duo would. 
 
 ## Set Up
+**(If your organization is using the new [Duo Universal Prompt](https://guide.duo.com/universal-prompt), you may not be able to set up the extension successfully. This will be resolved ASAP when I have time. Please check back in a week. Existing users are not affected. )**
+
 1. Add **[Easy Duo Authentication](https://chrome.google.com/webstore/detail/easy-duo-authentication/gminifhfphcinahingelhehkfagoghjk)** from the Chrome Web Store. **Pin it** for later convenience. 
 
 <img src="screenshots/pin.png" width="350">
@@ -31,7 +33,8 @@ If you open the extension, it should look like this.
 <img src="screenshots/add_device.png" width="450">
 
 Choose ```Tablet```, choose either ```iOS``` or ```Android```, and click ```Continue```. Then, click ```I have Duo Mobile installed```, and click ```Email me an activation link instead```. Enter your email and **get a one-time activation link** (in the form **https&#8203;://m-x.duosecurity.com/x**). </br>
-(As several users noted, the activation link sent to an Outlook email account may not work. For now, please use other email accounts, such as Gmail, to receive the activation link. This will be resolved in a future update when I have time.)
+
+**(As several users noted, the activation links sent to some email accounts are not in the form displayed above, so they won't work. For now, if the same issue happens, please use another email account, preferably Gmail, to receive the activation link. This will be resolved ASAP when I have time.)**
 
 <img src="screenshots/get_link.png" width="450">
  
