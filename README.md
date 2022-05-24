@@ -30,7 +30,8 @@ If you open the extension, it should look like this.
 
 <img src="screenshots/add_device.png" width="450">
 
-Choose ```Tablet```, choose either ```iOS``` or ```Android```, and click ```Continue```. Then, click ```I have Duo Mobile installed```, and click ```Email me an activation link instead```. Enter your email and **get a one-time activation link** (in the form **https&#8203;://m-x.duosecurity.com/x**). 
+Choose ```Tablet```, choose either ```iOS``` or ```Android```, and click ```Continue```. Then, click ```I have Duo Mobile installed```, and click ```Email me an activation link instead```. Enter your email and **get a one-time activation link** (in the form **https&#8203;://m-x.duosecurity.com/x**). </br>
+(As several users noted, the activation link sent to an Outlook email account may not work. For now, please use other email accounts, such as Gmail, to receive the activation link. This will be resolved in a future update when I have time.)
 
 <img src="screenshots/get_link.png" width="450">
  
