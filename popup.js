@@ -1,11 +1,14 @@
-// chrome.storage.sync.clear(); 
-
 chrome.storage.sync.get(null, function (data) {
     let HOTPSecret = data.HOTPSecret;
-    if (HOTPSecret == undefined) // the user has not submitted a correct activation link
-    {
+    /*
+     * The user has not submitted a valid activation link. 
+     */
+    if (HOTPSecret == undefined)
+    {   
+        /*
+         * When the user submits an activation link, try to fetch the HOTP secret from Duo. 
+         */
         document.getElementById('submit').onclick = function () {
-            // Get HOTP secret from Duo
             let link = document.getElementById('link').value;
             let host = 'api' + link.substring(link.indexOf('-'), link.indexOf('com') + 3);
             let key = link.substring(link.lastIndexOf('/') + 1);
@@ -15,6 +18,7 @@ chrome.storage.sync.get(null, function (data) {
 
             let http = new XMLHttpRequest();
             http.open('POST', duoURL, true);
+            http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             http.onload = function () {
                 let obj = JSON.parse(this.responseText);
                 if (obj.stat == 'OK') { // on success
@@ -26,11 +30,15 @@ chrome.storage.sync.get(null, function (data) {
                 else // on failure
                     alert('Something went wrong. Maybe the activation link has been used.\n\nPlease retry the previous steps. Thank you!')
             };
-            http.send();
+            http.send('jailbroken=false&architecture=arm64&region=US&app_id=com.duosecurity.duomobile&full_disk_encryption=true&passcode_status=true&platform=Android&app_version=3.49.0&app_build_number=323001&version=11&manufacturer=unknown&language=en&model=Easy%20Duo%20Authentication&security_patch_level=2021-02-01');
         };
     }
 
-    else // calculate and display the next HOTP passcode
+    /*
+     * A valid activation link has been submitted by the user, and the HOTP secret has been fetched from Duo. 
+     * Calculate and display the next HOTP passcode. 
+     */
+    else
     {
         document.getElementById('setUp').classList.add('hidden');
         document.getElementById('setUpSuccess').classList.add('hidden');
