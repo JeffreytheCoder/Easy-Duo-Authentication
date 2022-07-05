@@ -4,7 +4,7 @@ A Chrome extension that gives users passcodes for [the Duo Multi-Factor Authenti
 
 <img src="screenshots/auth_demo.gif" width="600">
 
-Initially developed during the UCLA HOTH 8 Hackathon. 
+Initially developed during the UCLA HOTH 8 Hackathon (Feb 2021). 
 
 ## Overview
 
@@ -37,9 +37,9 @@ Choose ```Tablet```, choose either ```iOS``` or ```Android```, and click ```Cont
 
 <img src="screenshots/get_link.png" width="450">
  
-5. In Chrome, **open the extension** and **sumbit the one-time activation link**. Wait until a "set up successful" message appears. 
+3. In Chrome, **open the extension** and **sumbit the one-time activation link**. Wait until a "set up successful" message appears. 
 
-6. You're all set! Now every time authenticating with Duo, **open the extension to get your passcode**. Regardless of the current device (**it doesn't need to be the one you just added**), paste the passcode and log in. 
+4. You're all set! Now every time authenticating with Duo, **open the extension to get your passcode**. Regardless of the current device (**it doesn't need to be the one you just added**), paste the passcode and log in. 
 
 <img src="screenshots/auth_demo.png" width="550">
 
