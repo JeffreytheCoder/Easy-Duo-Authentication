@@ -3,7 +3,7 @@
     "version": "1.0.5",
     "description": "Gives you passcodes for the Duo Multi-Factor Authentication.",
     "permissions": [
-        "storage"
+        "storage", "tabs"
     ],
     "browser_action": {
         "default_popup": "popup.html", 
@@ -20,5 +20,11 @@
         "48": "images/unlock_icon48.png",
         "128": "images/unlock_icon128.png"
     },
+    "content_scripts": [
+        {
+            "matches": ["http://api-d594f029.duosecurity.com/frame/v4/auth/prompt/*", "https://api-d594f029.duosecurity.com/frame/v4/auth/prompt/*"],
+            "js": ["content.js"]
+        }
+    ],
     "manifest_version": 2
 }
