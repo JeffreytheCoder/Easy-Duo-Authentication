@@ -1,5 +1,5 @@
 import { fetchHOTPSecretFromDuo } from "./background.js";
-import { Hotp } from "./jsOTP.js";
+import { Hotp } from "./jsOTP.js"; // used to generate HOTP passcodes (https://github.com/jiangts/JS-OTP)
 
 chrome.storage.sync.get(null, function (data) {
     let HOTPSecret = data.HOTPSecret;
@@ -37,7 +37,7 @@ chrome.storage.sync.get(null, function (data) {
 
         document.getElementById('next').onclick = function () {
             count += 1;
-            passcodes.push(calculatePasscode(count));
+            passcodes.push(calculatePasscode());
             document.getElementById('passcode').innerHTML = passcodes[count];
             chrome.storage.sync.set({ passcodes });
             chrome.storage.sync.set({ count });

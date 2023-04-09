@@ -40,10 +40,11 @@ export class Hotp {
     }
 
     getOtp(key, counter) {
-        var digest, h, offset, shaObj, v;
-        shaObj = new jsSHA("SHA-1", "TEXT");
+        var digest, h, offset, shaObj, v, counterString;
+        shaObj = new jsSHA("SHA-1", "HEX"); // was "TEXT" but this broke for counter > 127
         shaObj.setHMACKey(key, "TEXT");
-        shaObj.update(this.uintToString(new Uint8Array(this.intToBytes(counter))));
+        counterString = ("0000000000000000" + counter.toString(16)).slice(-16); // padded hex counter value
+        shaObj.update(counterString);
         digest = shaObj.getHMAC("HEX");
         // Get byte array
         h = this.hexToBytes(digest);
