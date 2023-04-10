@@ -1,26 +1,35 @@
-import { fetchHOTPSecretFromDuo } from "./background.js";
+import { getQRLinkFromPage, fetchHOTPSecretFromDuo } from "./background.js";
 import { Hotp } from "./jsOTP.js"; // used to generate HOTP passcodes (https://github.com/jiangts/JS-OTP)
 
 chrome.storage.sync.get(null, function (data) {
-    let HOTPSecret = data.HOTPSecret;
-    if (HOTPSecret == undefined) {
-        // When the user submits an activation link, try to fetch the HOTP secret from Duo
-        document.getElementById('submit').onclick = async function () {
-            let link = document.getElementById('link').value;
-            document.getElementById('submit').innerText = 'Activating! Please wait...'
-            let error = await fetchHOTPSecretFromDuo(link);
-            // On Success
-            if (!error) {
-                document.getElementById('setUp').classList.add('hidden');
-                document.getElementById('setUpSuccess').classList.remove('hidden');
-            }
-            // On failure
-            else {
-                alert('Oops, something went wrong!\n\n'
-                    + 'It seems like the activation link is no longer valid. Please retry the previous steps.');
-                console.log(error);
-            }
-            document.getElementById('submit').innerText = "Submit"
+    if (!data.HOTPSecret) {
+        document.getElementById('scan').onclick = async function () {
+            // Try to get the QR link from the current page
+            document.getElementById('scan').innerText = 'Scanning! Please wait...'
+            await getQRLinkFromPage()
+                .then(async (QRLink) => {
+
+                    // Try to fetch the HOTP secret from Duo
+                    let [key, host] = QRLink.substring(QRLink.lastIndexOf('=') + 1).split('-');
+                    host = atob(host);
+                    await fetchHOTPSecretFromDuo(host, key)
+                        .then((HOTPSecret) => {
+                            chrome.storage.sync.set({ HOTPSecret });
+                            document.getElementById('setUp').classList.add('hidden');
+                            document.getElementById('setUpSuccess').classList.remove('hidden');
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                            alert('Oops, something went wrong!\n\n'
+                                + 'It seems like the QR code is no longer valid. Please retry the previous steps.');
+                        });
+                        
+                })
+                .catch((error) => {
+                    console.log(error);
+                    alert('No Duo QR code detected. Please try again.');
+                });
+            document.getElementById('scan').innerText = 'Scan QR Code';
         };
     }
 
@@ -62,8 +71,8 @@ chrome.storage.sync.get(null, function (data) {
 
         let count = data.count;
         let passcodes = data.passcodes;
-        HOTPSecret = data.HOTPSecret;
-        if (count == undefined) {
+        let HOTPSecret = data.HOTPSecret;
+        if (count === undefined) {
             count = -1;
             passcodes = [];
         }

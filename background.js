@@ -1,6 +1,12 @@
-export async function fetchHOTPSecretFromDuo(link) {
-    let host = 'api' + link.substring(link.indexOf('-'), link.indexOf('com') + 3);
-    let key = link.substring(link.lastIndexOf('/') + 1);
+export async function getQRLinkFromPage() {
+    // Send request to the content script
+    let [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+    return await chrome.tabs.sendMessage(tab.id, { task: 'getQRLink' })
+        .then((response) => response.QRLink);
+}
+
+// Fetch the HOTP secret from the Duo API
+export async function fetchHOTPSecretFromDuo(host, key) {
     let duoURL = 'https://' + host + '/push/v2/activation/' + key + '?customer_protocol=1';
     return await fetch(duoURL, {
         method: 'POST',
@@ -24,14 +30,6 @@ export async function fetchHOTPSecretFromDuo(link) {
             'security_patch_level': '2021-02-01'
         })
     })
-        // On success
-        .then(async (response) => {
-            let data = await response.json();
-            let HOTPSecret = data.response.hotp_secret;
-            chrome.storage.sync.set({ HOTPSecret });
-        })
-        // On failure
-        .catch((error) => {
-            return error;
-        });
+        .then((res) => res.json())
+        .then((data) => data.response.hotp_secret);
 }
