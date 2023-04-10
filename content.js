@@ -10,8 +10,6 @@ chrome.runtime.onMessage.addListener(
 // Get the QR link from the DOM
 function getQRLink() {
     let QRImg = document.getElementsByClassName('qr')[0]; // Traditional Prompt
-    if (!QRImg) {
-        QRImg = document.querySelector('[data-testid=qr-code]'); // Universal Prompt
-    }
-    return QRImg.src;
+    QRImg = (QRImg) ? QRImg : document.querySelector('[data-testid=qr-code]'); // Universal Prompt
+    return (QRImg) ? QRImg.src : null;
 }
